@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChainGuard360 | Consumer Transparency Portal</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Poppins", sans-serif; }
+    body {
+      background: radial-gradient(circle at top left, #0a0f1f, #010409 80%);
+      color: #e0e0e0;
+      overflow-x: hidden;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.2rem 2rem;
+      background: rgba(20, 20, 30, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 255, 255, 0.15);
+      position: sticky; top: 0; z-index: 10;
+    }
+    .logo {
+      font-size: 1.6rem; font-weight: 700;
+      background: linear-gradient(90deg, #00eaff, #6f00ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .nav-links { list-style: none; display: flex; gap: 1.8rem; }
+    .nav-links a {
+      text-decoration: none; color: #e0e0e0;
+      font-weight: 500; transition: 0.3s;
+    }
+    .nav-links a:hover { color: #00eaff; }
+    .hamburger { display: none; color: #fff; font-size: 1.8rem; cursor: pointer; }
+
+    /* Main */
+    main { padding: 6rem 2rem; max-width: 1100px; margin: auto; text-align: center; }
+
+    h2.title {
+      font-size: 2rem;
+      background: linear-gradient(90deg, #00eaff, #6f00ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 2rem;
+    }
+
+    /* Search Bar */
+    .search-bar {
+      display: flex; justify-content: center; gap: 1rem;
+      margin-bottom: 3rem;
+    }
+    input[type="text"] {
+      padding: 0.8rem 1rem;
+      width: 60%;
+      border-radius: 8px;
+      border: none;
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      outline: none;
+      font-size: 1rem;
+    }
+    button.search-btn {
+      background: linear-gradient(90deg, #00eaff, #6f00ff);
+      border: none;
+      padding: 0.8rem 1.6rem;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button.search-btn:hover { box-shadow: 0 0 20px rgba(0,255,255,0.3); }
+
+    /* Product Info */
+    .product-info {
+      display: none;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 238, 255, 0.15);
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 3rem;
+      text-align: left;
+      line-height: 1.6;
+    }
+    .product-info.active { display: block; }
+    .product-info h3 {
+      color: #00eaff;
+      margin-bottom: 1rem;
+    }
+    .info-row { margin-bottom: 0.8rem; }
+    .label { color: #6f00ff; font-weight: 600; }
+
+    /* Chart */
+    .chart-container {
+      display: none;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(0,238,255,0.15);
+      border-radius: 15px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .chart-container.active { display: block; }
+    canvas { max-width: 350px; margin: 1.5rem auto; }
+
+    /* Sustainability */
+    .sustainability {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0,238,255,0.15);
+      border-radius: 15px;
+      padding: 1.5rem;
+      text-align: left;
+    }
+    .sustainability h3 {
+      color: #00eaff;
+      margin-bottom: 1rem;
+    }
+    ul { list-style: square; padding-left: 1.5rem; line-height: 1.8; }
+
+    footer {
+      background: rgba(20, 20, 30, 0.9);
+      color: #ccc;
+      text-align: center;
+      padding: 1.5rem;
+      border-top: 1px solid rgba(0, 255, 255, 0.15);
+      margin-top: 4rem;
+      font-size: 0.9rem;
+    }
+
+    @media(max-width:768px){
+      .nav-links { display:none; flex-direction:column; position:absolute; top:65px; right:0; width:65%; background:rgba(10,10,20,0.95); border-left:1px solid rgba(0,255,255,0.2); padding:1.5rem; }
+      .nav-links.active { display:flex; }
+      .hamburger { display:block; }
+      input[type="text"] { width: 80%; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <header>
+    <nav class="navbar">
+      <div class="logo">ChainGuard360</div>
+      <ul class="nav-links" id="navMenu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="consumer.html" class="active">Consumer</a></li>
+        <li><a href="login.html">Logout</a></li>
+      </ul>
+      <div class="hamburger" id="hamburger">&#9776;</div>
+    </nav>
+  </header>
+
+  <!-- MAIN -->
+  <main>
+    <h2 class="title">Consumer Transparency Portal</h2>
+    <p>Enter your product’s <strong>Batch ID</strong> to verify its authenticity and view blockchain-verified details.</p>
+
+    <!-- Search -->
+    <div class="search-bar">
+      <input type="text" id="batchInput" placeholder="Enter Batch ID (e.g., B501)" />
+      <button class="search-btn" onclick="verifyProduct()">Verify</button>
+    </div>
+
+    <!-- Product Info -->
+    <div id="productInfo" class="product-info"></div>
+
+    <!-- Chart -->
+    <div id="chartBox" class="chart-container">
+      <h3>🧠 Integrity Twin Health</h3>
+      <canvas id="integrityChart"></canvas>
+    </div>
+
+    <!-- Sustainability -->
+    <div class="sustainability">
+      <h3>🌱 Sustainability Highlights</h3>
+      <ul>
+        <li>Carbon-neutral verified logistics chain</li>
+        <li>All suppliers meet ChainGuard360 compliance standards</li>
+        <li>Fully traceable packaging lifecycle</li>
+        <li>Blockchain-certified ethical sourcing</li>
+      </ul>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 ChainGuard360 | Consumer Transparency Portal</p>
+  </footer>
+
+  <script>
+    // Hamburger toggle
+    document.getElementById("hamburger").addEventListener("click", () => {
+      document.getElementById("navMenu").classList.toggle("active");
+    });
+
+    // Sample blockchain-verified products
+    const products = {
+      B501: {
+        name: "Organic Turmeric Powder",
+        origin: "Maharashtra, India",
+        supplier: "AgriFresh Co.",
+        warehouse: "Nashik Central Hub",
+        integrity: 96,
+        contract: "0xD32F...A76C",
+        health: [85, 10, 5],
+      },
+      B502: {
+        name: "Cold Pressed Coconut Oil",
+        origin: "Kerala, India",
+        supplier: "PureHarvest Pvt. Ltd.",
+        warehouse: "Kochi Warehouse",
+        integrity: 92,
+        contract: "0xAB9E...42CC",
+        health: [80, 15, 5],
+      },
+      B503: {
+        name: "Pharma Grade Ethanol",
+        origin: "Gujarat, India",
+        supplier: "BioChem Industries",
+        warehouse: "Surat Facility",
+        integrity: 88,
+        contract: "0xC12A...5BFF",
+        health: [70, 20, 10],
+      },
+      B504: {
+        name: "Premium Rice Pack",
+        origin: "Punjab, India",
+        supplier: "HarvestEdge",
+        warehouse: "Amritsar Storage Unit",
+        integrity: 98,
+        contract: "0xAA55...8EEE",
+        health: [90, 8, 2],
+      }
+    };
+
+    function verifyProduct() {
+      const input = document.getElementById("batchInput").value.trim().toUpperCase();
+      const productBox = document.getElementById("productInfo");
+      const chartBox = document.getElementById("chartBox");
+      const chartCanvas = document.getElementById("integrityChart");
+
+      if (products[input]) {
+        const p = products[input];
+        productBox.innerHTML = `
+          <h3>🧾 Product Details</h3>
+          <div class="info-row"><span class="label">Product Name:</span> ${p.name}</div>
+          <div class="info-row"><span class="label">Batch ID:</span> ${input}</div>
+          <div class="info-row"><span class="label">Origin:</span> ${p.origin}</div>
+          <div class="info-row"><span class="label">Supplier:</span> ${p.supplier}</div>
+          <div class="info-row"><span class="label">Warehouse:</span> ${p.warehouse}</div>
+          <div class="info-row"><span class="label">Integrity Score:</span> ${p.integrity}%</div>
+          <div class="info-row"><span class="label">Blockchain Verified:</span> ✅ True</div>
+          <div class="info-row"><span class="label">Smart Contract ID:</span> ${p.contract}</div>
+        `;
+        productBox.classList.add("active");
+        chartBox.classList.add("active");
+
+        // Chart update
+        new Chart(chartCanvas, {
+          type: "doughnut",
+          data: {
+            labels: ["Healthy", "Warning", "Critical"],
+            datasets: [{
+              data: p.health,
+              backgroundColor: [
+                "rgba(0,238,255,0.8)",
+                "rgba(255,193,7,0.8)",
+                "rgba(255,77,77,0.8)"
+              ],
+              borderWidth: 0
+            }]
+          },
+          options: {
+            cutout: "70%",
+            plugins: { legend: { labels: { color: "#e0e0e0" } } }
+          }
+        });
+
+      } else {
+        alert("❌ Invalid Batch ID or not verified on blockchain.");
+        productBox.classList.remove("active");
+        chartBox.classList.remove("active");
+      }
+    }
+  </script>
+</body>
+</html>

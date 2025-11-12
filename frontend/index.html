@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChainGuard360 | AI + Blockchain Supply Chain</title>
+
+  <style>
+    /* === BASE RESET === */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+    body {
+      background: radial-gradient(circle at top left, #0a0f1f, #010409 80%);
+      color: #e0e0e0;
+      overflow-x: hidden;
+    }
+
+    /* === NAVBAR === */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 2rem;
+      background: rgba(20, 20, 30, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 255, 255, 0.15);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .logo {
+      font-size: 1.7rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #00eaff, #6f00ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 1px;
+      cursor: pointer;
+    }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1.8rem;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: #e0e0e0;
+      font-weight: 500;
+      position: relative;
+      transition: 0.3s ease;
+    }
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #00eaff, #6f00ff);
+      left: 0;
+      bottom: -4px;
+      transition: 0.3s;
+    }
+    .nav-links a:hover::after,
+    .nav-links a.active::after {
+      width: 100%;
+    }
+    .nav-links a:hover {
+      color: #00eaff;
+    }
+    .hamburger {
+      display: none;
+      color: #fff;
+      font-size: 1.8rem;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 65px;
+        right: 0;
+        width: 65%;
+        background: rgba(10, 10, 20, 0.95);
+        border-left: 1px solid rgba(0, 255, 255, 0.2);
+        padding: 1.5rem;
+      }
+      .nav-links.active {
+        display: flex;
+      }
+      .hamburger {
+        display: block;
+      }
+    }
+
+    /* === HERO === */
+    .hero {
+      text-align: center;
+      padding: 7rem 2rem 6rem;
+      background: radial-gradient(circle at center, #111829, #05060d);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(0, 238, 255, 0.3), transparent 70%);
+      top: -100px;
+      left: -100px;
+      filter: blur(100px);
+      z-index: 0;
+    }
+    .hero h1 {
+      font-size: 2.8rem;
+      background: linear-gradient(90deg, #00eaff, #6f00ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+      z-index: 2;
+      position: relative;
+    }
+    .hero p {
+      font-size: 1.1rem;
+      color: #d0d0d0;
+      max-width: 750px;
+      margin: 0 auto;
+      line-height: 1.6;
+      z-index: 2;
+      position: relative;
+    }
+    .cta-btn {
+      display: inline-block;
+      margin-top: 2rem;
+      padding: 0.9rem 2.2rem;
+      border-radius: 50px;
+      background: linear-gradient(90deg, #00eaff, #6f00ff);
+      color: #fff;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .cta-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 0 25px rgba(111, 0, 255, 0.7);
+    }
+
+    /* === FEATURES === */
+    .features {
+      padding: 5rem 1rem;
+      text-align: center;
+      background: rgba(10, 12, 25, 0.9);
+    }
+    .features h2 {
+      font-size: 2rem;
+      background: linear-gradient(90deg, #00eaff, #6f00ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 2rem;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .feature-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 2rem 1.5rem;
+      backdrop-filter: blur(15px);
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::after {
+      content: "";
+      position: absolute;
+      width: 60%;
+      height: 60%;
+      top: -30%;
+      right: -30%;
+      background: radial-gradient(circle, rgba(0, 238, 255, 0.2), transparent 80%);
+      filter: blur(40px);
+      z-index: 0;
+    }
+    .feature-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(0, 255, 255, 0.3);
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.15);
+    }
+    .feature-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.6rem;
+      background: linear-gradient(90deg, #00eaff, #6f00ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      z-index: 1;
+      position: relative;
+    }
+    .feature-card p {
+      font-size: 0.95rem;
+      color: #b5b8c1;
+      line-height: 1.6;
+      z-index: 1;
+      position: relative;
+    }
+
+    /* === ABOUT === */
+    .about {
+      padding: 5rem 2rem;
+      text-align: center;
+      background: #05060d;
+    }
+    .about h2 {
+      font-size: 2rem;
+      background: linear-gradient(90deg, #00eaff, #6f00ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1.5rem;
+    }
+    .about p {
+      max-width: 850px;
+      margin: 0 auto;
+      color: #c7c9d3;
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+
+    /* === FOOTER === */
+    footer {
+      background: rgba(20, 20, 30, 0.9);
+      color: #ccc;
+      text-align: center;
+      padding: 1.5rem;
+      border-top: 1px solid rgba(0, 255, 255, 0.15);
+      font-size: 0.9rem;
+    }
+  </style>
+
+  <script>
+    // Navbar Toggle for Mobile
+    document.addEventListener("DOMContentLoaded", () => {
+      const hamburger = document.getElementById("hamburger");
+      const navMenu = document.getElementById("navMenu");
+      hamburger.addEventListener("click", () => {
+        navMenu.classList.toggle("active");
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <!-- === NAVBAR === -->
+  <header>
+    <nav class="navbar">
+      <div class="logo" onclick="window.location.href='index.html'">ChainGuard360</div>
+      <ul class="nav-links" id="navMenu">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="supplier_panel.html">Supplier</a></li>
+        <li><a href="warehouse.html">Warehouse</a></li>
+        <li><a href="consumer.html">Consumer</a></li>
+        <li><a href="admin_panel.html">Admin</a></li>
+        <li><a href="login.html">Logout</a></li>
+      </ul>
+      <div class="hamburger" id="hamburger">&#9776;</div>
+    </nav>
+  </header>
+
+  <!-- === HERO SECTION === -->
+  <section class="hero">
+    <h1>Next-Gen Supply Chain Integrity</h1>
+    <p>AI + Blockchain fusion for total transparency, predictive logistics, and fraud-proof operations — powering the future of global trade.</p>
+    <a href="dashboard.html" class="cta-btn">Launch Dashboard</a>
+  </section>
+
+  <!-- === FEATURES === -->
+  <section class="features">
+    <h2>Core Intelligence Layers</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <h3>🧠 AI Integrity Twin</h3>
+        <p>Each shipment has a digital twin that learns behavior and predicts quality loss or delays using ML analytics.</p>
+      </div>
+      <div class="feature-card">
+        <h3>🔗 Blockchain Traceability</h3>
+        <p>Immutable event tracking across suppliers and logistics ensures trust and prevents tampering.</p>
+      </div>
+      <div class="feature-card">
+        <h3>💰 Trust Token System</h3>
+        <p>Partners gain or lose trust tokens based on performance — creating an accountable, transparent network.</p>
+      </div>
+      <div class="feature-card">
+        <h3>🧭 Crisis Simulation</h3>
+        <p>Predict and simulate disruption scenarios like route blockages and supplier failures in real time.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- === ABOUT === -->
+  <section class="about">
+    <h2>Our Vision</h2>
+    <p>ChainGuard360 combines AI, Blockchain, and Digital Twins to redefine supply chain transparency. Our mission is to create an autonomous, fraud-resistant, and self-learning ecosystem where every transaction, route, and product is trusted and verifiable.</p>
+  </section>
+
+  <!-- === FOOTER === -->
+  <footer>
+    <p>© 2025 ChainGuard360 | AI + Blockchain Supply Chain Platform</p>
+  </footer>
+</body>
+</html>

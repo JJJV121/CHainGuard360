@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChainGuard360 | Crisis Simulation Sandbox</title>
+
+  <!-- Chart.js for Simulation Visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top left, #0a0f1f, #010409 80%);
+      color: #e0e0e0;
+      overflow-x: hidden;
+    }
+
+    /* === Navbar === */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 2rem;
+      background: rgba(20, 20, 30, 0.8);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid rgba(0, 255, 255, 0.15);
+    }
+
+    .logo {
+      font-size: 1.6rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #00eaff, #6f00ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1.8rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #e0e0e0;
+      font-weight: 500;
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      color: #00eaff;
+    }
+
+    .hamburger {
+      display: none;
+      color: #fff;
+      font-size: 1.8rem;
+      cursor: pointer;
+    }
+
+    /* === Main Section === */
+    main {
+      padding: 6rem 2rem;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    h2.title {
+      text-align: center;
+      font-size: 2rem;
+      background: linear-gradient(90deg, #00eaff, #6f00ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 2.5rem;
+    }
+
+    /* === Simulation Panel === */
+    .simulation-panel {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 238, 255, 0.15);
+      border-radius: 15px;
+      padding: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .form-section, .result-section {
+      flex: 1;
+      min-width: 320px;
+    }
+
+    .form-section h3 {
+      color: #00eaff;
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      margin: 0.8rem 0 0.4rem;
+      font-weight: 500;
+    }
+
+    select, input, button {
+      width: 100%;
+      padding: 0.8rem;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      margin-bottom: 1rem;
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+
+    select:focus, input:focus {
+      border: 1px solid #00eaff;
+    }
+
+    button {
+      background: linear-gradient(90deg, #00eaff, #6f00ff);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+    }
+
+    /* === Results === */
+    .result-section {
+      text-align: center;
+    }
+
+    .result-box {
+      margin-top: 1.5rem;
+      background: rgba(0, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 1rem;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    canvas {
+      margin-top: 1.5rem;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* === Footer === */
+    footer {
+      background: rgba(20, 20, 30, 0.9);
+      color: #ccc;
+      text-align: center;
+      padding: 1.5rem;
+      border-top: 1px solid rgba(0, 255, 255, 0.15);
+      margin-top: 4rem;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 65px;
+        right: 0;
+        width: 65%;
+        background: rgba(10, 10, 20, 0.95);
+        border-left: 1px solid rgba(0, 255, 255, 0.2);
+        padding: 1.5rem;
+      }
+      .nav-links.active { display: flex; }
+      .hamburger { display: block; }
+      .simulation-panel { flex-direction: column; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- === NAVBAR === -->
+  <header>
+    <nav class="navbar">
+      <div class="logo">ChainGuard360</div>
+      <ul class="nav-links" id="navMenu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="simulation.html" class="active">Simulation</a></li>
+        <li><a href="login.html">Login</a></li>
+      </ul>
+      <div class="hamburger" id="hamburger">&#9776;</div>
+    </nav>
+  </header>
+
+  <!-- === MAIN === -->
+  <main>
+    <h2 class="title">Crisis Simulation Sandbox</h2>
+
+    <div class="simulation-panel">
+      <!-- Input Form -->
+      <div class="form-section">
+        <h3>🧠 Simulation Settings</h3>
+        <label for="scenario">Select Scenario:</label>
+        <select id="scenario">
+          <option value="delay">Shipment Delay</option>
+          <option value="supplier">Supplier Failure</option>
+          <option value="route">Route Blockage</option>
+          <option value="weather">Weather Disruption</option>
+        </select>
+
+        <label for="impact">Impact Level (1-10):</label>
+        <input type="number" id="impact" min="1" max="10" value="5" />
+
+        <label for="duration">Expected Delay (Hours):</label>
+        <input type="number" id="duration" min="1" max="72" value="6" />
+
+        <button id="runSimulation">Run Simulation</button>
+      </div>
+
+      <!-- Results -->
+      <div class="result-section">
+        <h3>📊 Simulation Result</h3>
+        <canvas id="simChart"></canvas>
+        <div class="result-box" id="resultText">No simulation run yet.</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 ChainGuard360 | AI-Driven Supply Chain Resilience</p>
+  </footer>
+
+  <script>
+    // Mobile Nav Toggle
+    document.addEventListener("DOMContentLoaded", () => {
+      const hamburger = document.getElementById("hamburger");
+      const navMenu = document.getElementById("navMenu");
+      hamburger.addEventListener("click", () => navMenu.classList.toggle("active"));
+    });
+
+    // Simulation Logic
+    const btn = document.getElementById("runSimulation");
+    const resultBox = document.getElementById("resultText");
+    const ctx = document.getElementById("simChart");
+
+    let simChart;
+
+    btn.addEventListener("click", () => {
+      const scenario = document.getElementById("scenario").value;
+      const impact = parseInt(document.getElementById("impact").value);
+      const duration = parseInt(document.getElementById("duration").value);
+
+      // Simulated data (AI-driven logic placeholder)
+      const delayCost = impact * duration * 1000;
+      const recoveryTime = Math.max(4, Math.min(24, impact * 2));
+
+      const message = `
+        Scenario: <strong>${scenario.toUpperCase()}</strong><br>
+        Estimated Loss: <strong>$${delayCost.toLocaleString()}</strong><br>
+        Predicted Recovery Time: <strong>${recoveryTime} hrs</strong><br>
+        Risk Level: <strong>${impact > 7 ? "Critical 🔴" : impact > 4 ? "Moderate 🟠" : "Low 🟢"}</strong>
+      `;
+      resultBox.innerHTML = message;
+
+      // Destroy old chart if exists
+      if (simChart) simChart.destroy();
+
+      // Generate new chart
+      simChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: ["Delay", "Cost", "Recovery"],
+          datasets: [{
+            label: "Impact Analysis",
+            data: [duration, delayCost / 1000, recoveryTime],
+            backgroundColor: [
+              "rgba(255, 99, 132, 0.8)",
+              "rgba(54, 162, 235, 0.8)",
+              "rgba(255, 206, 86, 0.8)"
+            ],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          scales: { y: { beginAtZero: true, ticks: { color: "#e0e0e0" } } },
+          plugins: { legend: { labels: { color: "#e0e0e0" } } }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

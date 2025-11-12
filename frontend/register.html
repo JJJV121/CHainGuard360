@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChainGuard360 | Register</title>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Poppins", sans-serif; }
+    body {
+      background: radial-gradient(circle at top left, #0a0f1f, #010409 80%);
+      color: #e0e0e0;
+      overflow-x: hidden;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 2rem;
+      background: rgba(20, 20, 30, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 255, 255, 0.15);
+    }
+    .logo {
+      font-size: 1.6rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #00eaff, #6f00ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1.8rem;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: #e0e0e0;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+    .nav-links a:hover { color: #00eaff; }
+
+    /* Register Form */
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 90vh;
+      text-align: center;
+    }
+    .register-box {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 238, 255, 0.15);
+      border-radius: 15px;
+      padding: 3rem 2rem;
+      width: 100%;
+      max-width: 450px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 20px rgba(0, 238, 255, 0.1);
+    }
+    h2 {
+      background: linear-gradient(90deg, #00eaff, #6f00ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1.5rem;
+    }
+    label {
+      display: block;
+      text-align: left;
+      margin: 0.8rem 0 0.3rem;
+      font-size: 0.95rem;
+    }
+    input {
+      width: 100%;
+      padding: 0.8rem;
+      border-radius: 8px;
+      border: none;
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      outline: none;
+    }
+    input:focus {
+      border: 1px solid #00eaff;
+      background: rgba(0, 255, 255, 0.05);
+    }
+    button {
+      width: 100%;
+      margin-top: 1.5rem;
+      padding: 0.9rem;
+      border-radius: 50px;
+      border: none;
+      background: linear-gradient(90deg, #00eaff, #6f00ff);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+    }
+    p {
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+    a { color: #00eaff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    footer {
+      background: rgba(20, 20, 30, 0.9);
+      color: #ccc;
+      text-align: center;
+      padding: 1.5rem;
+      border-top: 1px solid rgba(0, 255, 255, 0.15);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAVBAR -->
+  <header>
+    <nav class="navbar">
+      <div class="logo">ChainGuard360</div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="simulation.html">Simulation</a></li>
+        <li><a href="login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- REGISTER FORM -->
+  <div class="container">
+    <div class="register-box">
+      <h2>Create Your Account</h2>
+      <form id="registerForm">
+        <label>Full Name</label>
+        <input type="text" name="name" placeholder="Enter your name" required />
+
+        <label>Email</label>
+        <input type="email" name="email" placeholder="Enter your email" required />
+
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Enter your password" required />
+
+        <label>Confirm Password</label>
+        <input type="password" name="confirm" placeholder="Confirm your password" required />
+
+        <button type="submit">Register</button>
+
+        <p>Already have an account? <a href="login.html">Login here</a></p>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 ChainGuard360 | Join the Trusted Network</p>
+  </footer>
+
+  <script>
+    // Redirect to login after registration
+    document.getElementById("registerForm").addEventListener("submit", function(e) {
+      e.preventDefault(); // stop default form submission
+      alert("Registration successful! Redirecting to Login...");
+      window.location.href = "login.html"; // redirect
+    });
+  </script>
+</body>
+</html>

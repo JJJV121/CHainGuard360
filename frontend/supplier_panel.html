@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChainGuard360 | Supplier Panel</title>
+
+  <!-- Chart.js for Performance Chart -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Poppins", sans-serif; }
+    body {
+      background: radial-gradient(circle at top left, #0a0f1f, #010409 80%);
+      color: #e0e0e0;
+      overflow-x: hidden;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.2rem 2rem;
+      background: rgba(20, 20, 30, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 255, 255, 0.15);
+      position: sticky; top: 0; z-index: 10;
+    }
+    .logo {
+      font-size: 1.6rem; font-weight: 700;
+      background: linear-gradient(90deg, #00eaff, #6f00ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .nav-links { list-style: none; display: flex; gap: 1.8rem; }
+    .nav-links a {
+      text-decoration: none; color: #e0e0e0;
+      font-weight: 500; transition: 0.3s;
+    }
+    .nav-links a:hover { color: #00eaff; }
+    .hamburger { display: none; color: #fff; font-size: 1.8rem; cursor: pointer; }
+
+    /* Main Section */
+    main { padding: 6rem 2rem; max-width: 1200px; margin: auto; }
+
+    h2.title {
+      text-align: center;
+      font-size: 2rem;
+      background: linear-gradient(90deg, #00eaff, #6f00ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 2rem;
+    }
+
+    /* Overview Cards */
+    .overview {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 238, 255, 0.15);
+      border-radius: 12px;
+      text-align: center;
+      padding: 1.5rem;
+      transition: 0.3s;
+    }
+    .card:hover { transform: translateY(-6px); box-shadow: 0 0 15px rgba(0, 238, 255, 0.2); }
+    .card h3 { color: #00eaff; margin-bottom: 0.5rem; }
+    .card p { font-size: 1.3rem; color: #fff; font-weight: 600; }
+
+    /* Table Section */
+    .table-section {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 238, 255, 0.15);
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    .table-section h3 {
+      color: #00eaff;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      color: #ddd;
+    }
+    th, td {
+      padding: 0.75rem;
+      text-align: left;
+    }
+    th {
+      background: rgba(0, 238, 255, 0.1);
+      color: #00eaff;
+      border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+    }
+    tr:nth-child(even) { background: rgba(255, 255, 255, 0.03); }
+
+    td button {
+      background: linear-gradient(90deg, #00eaff, #6f00ff);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.4rem 0.8rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    td button:hover { transform: translateY(-2px); box-shadow: 0 0 10px rgba(0, 255, 255, 0.3); }
+
+    /* Chart */
+    .chart-container {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 238, 255, 0.15);
+      border-radius: 15px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    canvas { max-width: 400px; margin: 1.5rem auto; }
+
+    /* Footer */
+    footer {
+      background: rgba(20, 20, 30, 0.9);
+      color: #ccc;
+      text-align: center;
+      padding: 1.5rem;
+      border-top: 1px solid rgba(0, 255, 255, 0.15);
+      margin-top: 4rem;
+      font-size: 0.9rem;
+    }
+
+    @media(max-width:768px){
+      .nav-links { display: none; flex-direction: column; position: absolute; top: 65px; right: 0; width: 65%; background: rgba(10, 10, 20, 0.95); border-left: 1px solid rgba(0, 255, 255, 0.2); padding: 1.5rem; }
+      .nav-links.active { display: flex; }
+      .hamburger { display: block; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAVBAR -->
+  <header>
+    <nav class="navbar">
+      <div class="logo">ChainGuard360</div>
+      <ul class="nav-links" id="navMenu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="supplier_panel.html" class="active">Supplier Panel</a></li>
+        <li><a href="login.html">Logout</a></li>
+      </ul>
+      <div class="hamburger" id="hamburger">&#9776;</div>
+    </nav>
+  </header>
+
+  <!-- MAIN -->
+  <main>
+    <h2 class="title">Supplier Management Panel</h2>
+
+    <!-- Overview Stats -->
+    <div class="overview">
+      <div class="card"><h3>Active Shipments</h3><p>8</p></div>
+      <div class="card"><h3>Delivered</h3><p>24</p></div>
+      <div class="card"><h3>Integrity Score</h3><p>95%</p></div>
+      <div class="card"><h3>Trust Tokens</h3><p>52</p></div>
+    </div>
+
+    <!-- Shipment Table -->
+    <div class="table-section">
+      <h3>📦 Your Shipments</h3>
+      <table>
+        <thead>
+          <tr><th>Batch ID</th><th>Destination</th><th>Status</th><th>Integrity</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>#B201</td><td>Mumbai</td><td>In Transit</td><td>97%</td><td><button onclick="updateStatus('B201')">Mark Delivered</button></td></tr>
+          <tr><td>#B202</td><td>Delhi</td><td>Pending Dispatch</td><td>--</td><td><button onclick="updateStatus('B202')">Dispatch</button></td></tr>
+          <tr><td>#B199</td><td>Chennai</td><td>Delivered</td><td>93%</td><td><button disabled>Completed</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Chart -->
+    <div class="chart-container">
+      <h3>📈 Trust Token Growth</h3>
+      <canvas id="tokenChart"></canvas>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 ChainGuard360 | Supplier Panel</p>
+  </footer>
+
+  <script>
+    // Hamburger toggle
+    document.getElementById("hamburger").addEventListener("click", () => {
+      document.getElementById("navMenu").classList.toggle("active");
+    });
+
+    // Chart.js Trust Token Line Graph
+    const ctx = document.getElementById("tokenChart");
+    new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+        datasets: [{
+          label: "Trust Tokens",
+          data: [45, 46, 48, 50, 52, 54],
+          borderColor: "rgba(0,238,255,0.8)",
+          backgroundColor: "rgba(0,238,255,0.2)",
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        plugins: { legend: { labels: { color: "#e0e0e0" } } },
+        scales: {
+          x: { ticks: { color: "#ccc" } },
+          y: { ticks: { color: "#ccc" } }
+        }
+      }
+    });
+
+    // Shipment status action
+    function updateStatus(batchId) {
+      alert(`✅ Status for ${batchId} updated successfully!`);
+    }
+  </script>
+</body>
+</html>

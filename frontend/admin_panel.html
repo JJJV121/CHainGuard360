@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChainGuard360 | Admin Panel</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Poppins", sans-serif; }
+    body {
+      background: radial-gradient(circle at top left, #0a0f1f, #010409 80%);
+      color: #e0e0e0;
+      overflow-x: hidden;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.2rem 2rem;
+      background: rgba(20, 20, 30, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 255, 255, 0.15);
+      position: sticky; top: 0; z-index: 10;
+    }
+    .logo {
+      font-size: 1.6rem; font-weight: 700;
+      background: linear-gradient(90deg, #00eaff, #6f00ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .nav-links { list-style: none; display: flex; gap: 1.8rem; }
+    .nav-links a {
+      text-decoration: none; color: #e0e0e0;
+      font-weight: 500; transition: 0.3s;
+    }
+    .nav-links a:hover { color: #00eaff; }
+    .hamburger { display: none; color: #fff; font-size: 1.8rem; cursor: pointer; }
+
+    /* Main */
+    main { padding: 6rem 2rem; max-width: 1300px; margin: auto; }
+    h2.title {
+      text-align: center;
+      font-size: 2rem;
+      background: linear-gradient(90deg, #00eaff, #6f00ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 2rem;
+    }
+
+    /* Cards */
+    .overview {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem; margin-bottom: 3rem;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 238, 255, 0.15);
+      border-radius: 12px;
+      text-align: center;
+      padding: 1.5rem;
+      transition: 0.3s;
+    }
+    .card:hover { transform: translateY(-6px); box-shadow: 0 0 15px rgba(0, 238, 255, 0.2); }
+    .card h3 { color: #00eaff; margin-bottom: 0.5rem; }
+    .card p { font-size: 1.4rem; font-weight: bold; color: #fff; }
+
+    /* Table Container */
+    .table-container {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 238, 255, 0.15);
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    .table-container h3 {
+      color: #00eaff;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    table { width: 100%; border-collapse: collapse; color: #ddd; }
+    th, td { padding: 0.75rem; text-align: left; }
+    th {
+      background: rgba(0, 238, 255, 0.1);
+      color: #00eaff;
+      border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+    }
+    tr:nth-child(even) { background: rgba(255, 255, 255, 0.03); }
+
+    td button {
+      background: linear-gradient(90deg, #00eaff, #6f00ff);
+      color: #fff; border: none;
+      border-radius: 8px; padding: 0.4rem 0.8rem;
+      cursor: pointer; transition: 0.3s;
+    }
+    td button:hover { transform: translateY(-2px); box-shadow: 0 0 10px rgba(0, 255, 255, 0.3); }
+    td button.delete { background: linear-gradient(90deg, #ff5252, #ff1744); }
+
+    /* Chart Section */
+    .chart-container {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 238, 255, 0.15);
+      border-radius: 15px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    canvas { max-width: 400px; margin: 1.5rem auto; }
+
+    /* Footer */
+    footer {
+      background: rgba(20, 20, 30, 0.9);
+      color: #ccc;
+      text-align: center;
+      padding: 1.5rem;
+      border-top: 1px solid rgba(0, 255, 255, 0.15);
+      margin-top: 4rem;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; flex-direction: column; position: absolute; top: 65px; right: 0; width: 65%; background: rgba(10, 10, 20, 0.95); border-left: 1px solid rgba(0, 255, 255, 0.2); padding: 1.5rem; }
+      .nav-links.active { display: flex; }
+      .hamburger { display: block; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <header>
+    <nav class="navbar">
+      <div class="logo">ChainGuard360</div>
+      <ul class="nav-links" id="navMenu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="admin_panel.html" class="active">Admin Panel</a></li>
+        <li><a href="login.html">Logout</a></li>
+      </ul>
+      <div class="hamburger" id="hamburger">&#9776;</div>
+    </nav>
+  </header>
+
+  <main>
+    <h2 class="title">Admin Control Panel</h2>
+
+    <!-- Overview Cards -->
+    <div class="overview">
+      <div class="card"><h3>Total Shipments</h3><p>132</p></div>
+      <div class="card"><h3>Active Suppliers</h3><p>18</p></div>
+      <div class="card"><h3>Integrity Avg.</h3><p>94%</p></div>
+      <div class="card"><h3>AI Alerts</h3><p>6 Active</p></div>
+    </div>
+
+    <!-- Supplier Management -->
+    <div class="table-container">
+      <h3>🧱 Supplier Management</h3>
+      <table>
+        <thead>
+          <tr><th>Supplier ID</th><th>Name</th><th>Trust Tokens</th><th>Reputation</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>#S101</td><td>Alpha Logistics</td><td>52</td><td>Excellent</td><td><button>Edit</button> <button class="delete">Remove</button></td></tr>
+          <tr><td>#S102</td><td>Beta Cargo</td><td>45</td><td>Good</td><td><button>Edit</button> <button class="delete">Remove</button></td></tr>
+          <tr><td>#S103</td><td>Delta Freight</td><td>39</td><td>Average</td><td><button>Edit</button> <button class="delete">Remove</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Shipment Table -->
+    <div class="table-container">
+      <h3>📦 Shipment Overview</h3>
+      <table>
+        <thead>
+          <tr><th>Batch ID</th><th>Supplier</th><th>Destination</th><th>Status</th><th>Integrity</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>#B301</td><td>Alpha Logistics</td><td>Mumbai</td><td>In Transit</td><td>96%</td><td><button>Update</button> <button class="delete">Delete</button></td></tr>
+          <tr><td>#B302</td><td>Beta Cargo</td><td>Delhi</td><td>Delivered</td><td>93%</td><td><button>Edit</button> <button class="delete">Delete</button></td></tr>
+          <tr><td>#B303</td><td>Delta Freight</td><td>Chennai</td><td>Pending Dispatch</td><td>--</td><td><button>Dispatch</button> <button class="delete">Delete</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Chart -->
+    <div class="chart-container">
+      <h3>📊 System Integrity Overview</h3>
+      <canvas id="integrityChart"></canvas>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 ChainGuard360 | Admin Control Panel</p>
+  </footer>
+
+  <script>
+    // Hamburger Toggle
+    document.getElementById("hamburger").addEventListener("click", () => {
+      document.getElementById("navMenu").classList.toggle("active");
+    });
+
+    // Chart.js System Integrity
+    const ctx = document.getElementById("integrityChart");
+    new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: ["Alpha Logistics", "Beta Cargo", "Delta Freight", "Gamma Trans", "Omega Supply"],
+        datasets: [{
+          label: "Integrity %",
+          data: [96, 93, 89, 92, 95],
+          backgroundColor: [
+            "rgba(0,238,255,0.6)",
+            "rgba(111,0,255,0.6)",
+            "rgba(255,99,132,0.6)",
+            "rgba(0,255,128,0.6)",
+            "rgba(255,193,7,0.6)"
+          ]
+        }]
+      },
+      options: {
+        scales: {
+          y: { ticks: { color: "#e0e0e0" }, beginAtZero: true },
+          x: { ticks: { color: "#e0e0e0" } }
+        },
+        plugins: { legend: { labels: { color: "#e0e0e0" } } }
+      }
+    });
+  </script>
+</body>
+</html>
