@@ -32,6 +32,7 @@
       top: 0;
       z-index: 10;
     }
+
     .logo {
       font-size: 1.7rem;
       font-weight: 700;
@@ -41,11 +42,13 @@
       letter-spacing: 1px;
       cursor: pointer;
     }
+
     .nav-links {
       list-style: none;
       display: flex;
       gap: 1.8rem;
     }
+
     .nav-links a {
       text-decoration: none;
       color: #e0e0e0;
@@ -53,6 +56,7 @@
       position: relative;
       transition: 0.3s ease;
     }
+
     .nav-links a::after {
       content: "";
       position: absolute;
@@ -63,13 +67,16 @@
       bottom: -4px;
       transition: 0.3s;
     }
+
     .nav-links a:hover::after,
     .nav-links a.active::after {
       width: 100%;
     }
+
     .nav-links a:hover {
       color: #00eaff;
     }
+
     .hamburger {
       display: none;
       color: #fff;
@@ -97,43 +104,48 @@
       }
     }
 
-    /* === HERO === */
+    /* === HERO SECTION === */
     .hero {
-      text-align: center;
-      padding: 7rem 2rem 6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3rem;
+      padding: 6rem 2rem;
       background: radial-gradient(circle at center, #111829, #05060d);
-      position: relative;
-      overflow: hidden;
+      flex-wrap: wrap;
     }
-    .hero::before {
-      content: "";
-      position: absolute;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(0, 238, 255, 0.3), transparent 70%);
-      top: -100px;
-      left: -100px;
-      filter: blur(100px);
-      z-index: 0;
+
+    .hero-left img {
+      width: 380px;
+      max-width: 100%;
+      filter: drop-shadow(0 0 25px rgba(0, 238, 255, 0.4));
+      animation: float 4s ease-in-out infinite;
     }
-    .hero h1 {
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .hero-right {
+      text-align: left;
+      max-width: 550px;
+    }
+
+    .hero-right h1 {
       font-size: 2.8rem;
       background: linear-gradient(90deg, #00eaff, #6f00ff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-bottom: 1rem;
-      z-index: 2;
-      position: relative;
     }
-    .hero p {
+
+    .hero-right p {
       font-size: 1.1rem;
       color: #d0d0d0;
-      max-width: 750px;
-      margin: 0 auto;
       line-height: 1.6;
-      z-index: 2;
-      position: relative;
     }
+
     .cta-btn {
       display: inline-block;
       margin-top: 2rem;
@@ -146,6 +158,7 @@
       box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
+
     .cta-btn:hover {
       transform: translateY(-4px);
       box-shadow: 0 0 25px rgba(111, 0, 255, 0.7);
@@ -157,6 +170,7 @@
       text-align: center;
       background: rgba(10, 12, 25, 0.9);
     }
+
     .features h2 {
       font-size: 2rem;
       background: linear-gradient(90deg, #00eaff, #6f00ff);
@@ -164,6 +178,7 @@
       -webkit-text-fill-color: transparent;
       margin-bottom: 2rem;
     }
+
     .features-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -171,6 +186,7 @@
       max-width: 1100px;
       margin: 0 auto;
     }
+
     .feature-card {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(0, 255, 255, 0.1);
@@ -181,37 +197,25 @@
       position: relative;
       overflow: hidden;
     }
-    .feature-card::after {
-      content: "";
-      position: absolute;
-      width: 60%;
-      height: 60%;
-      top: -30%;
-      right: -30%;
-      background: radial-gradient(circle, rgba(0, 238, 255, 0.2), transparent 80%);
-      filter: blur(40px);
-      z-index: 0;
-    }
+
     .feature-card:hover {
       transform: translateY(-8px);
       border-color: rgba(0, 255, 255, 0.3);
       box-shadow: 0 0 15px rgba(0, 255, 255, 0.15);
     }
+
     .feature-card h3 {
       font-size: 1.3rem;
       margin-bottom: 0.6rem;
       background: linear-gradient(90deg, #00eaff, #6f00ff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      z-index: 1;
-      position: relative;
     }
+
     .feature-card p {
       font-size: 0.95rem;
       color: #b5b8c1;
       line-height: 1.6;
-      z-index: 1;
-      position: relative;
     }
 
     /* === ABOUT === */
@@ -220,6 +224,7 @@
       text-align: center;
       background: #05060d;
     }
+
     .about h2 {
       font-size: 2rem;
       background: linear-gradient(90deg, #00eaff, #6f00ff);
@@ -227,6 +232,7 @@
       -webkit-text-fill-color: transparent;
       margin-bottom: 1.5rem;
     }
+
     .about p {
       max-width: 850px;
       margin: 0 auto;
@@ -247,7 +253,6 @@
   </style>
 
   <script>
-    // Navbar Toggle for Mobile
     document.addEventListener("DOMContentLoaded", () => {
       const hamburger = document.getElementById("hamburger");
       const navMenu = document.getElementById("navMenu");
@@ -278,9 +283,14 @@
 
   <!-- === HERO SECTION === -->
   <section class="hero">
-    <h1>Next-Gen Supply Chain Integrity</h1>
-    <p>AI + Blockchain fusion for total transparency, predictive logistics, and fraud-proof operations — powering the future of global trade.</p>
-    <a href="dashboard.html" class="cta-btn">Launch Dashboard</a>
+    <div class="hero-left">
+      <img src="logo.png" alt="ChainGuard360 Logo Large" />
+    </div>
+    <div class="hero-right">
+      <h1>Next-Gen Supply Chain Integrity</h1>
+      <p>AI + Blockchain fusion for total transparency, predictive logistics, and fraud-proof operations — powering the future of global trade.</p>
+      <a href="dashboard.html" class="cta-btn">Launch Dashboard</a>
+    </div>
   </section>
 
   <!-- === FEATURES === -->
